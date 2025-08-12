@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: contextly_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: contextly_frontend
+    ports:
+      - "3000:80"
+    restart: always

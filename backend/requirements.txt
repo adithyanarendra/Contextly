@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-multipart
+transformers
+torch
+scikit-learn
+sqlalchemy
+pandas
+pdfplumber
+python-docx
+fpdf
+faiss-cpu
+python-dotenv
+psycopg2
+aiofiles
