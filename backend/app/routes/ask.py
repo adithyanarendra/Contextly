@@ -1,26 +1,29 @@
+from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+
 from ..database import get_db
-from ..qa_model import QASystem
 from ..models import QAHistory
-from typing import Optional
+from ..qa_model import QASystem
 
 router = APIRouter(prefix="/ask", tags=["ask"])
 
 
 class AskRequest(BaseModel):
     question: str
-    top_k: Optional[int] = 3  # number of chunks to retrieve
-    # doc_id optional (not implemented per-doc retrieval for simplicity; can be extended)
+    top_k: Optional[int] = 3
+    document_ids: Optional[List[int]] = None
 
 
 @router.post("/")
 def ask(req: AskRequest, db: Session = Depends(get_db)):
     if not req.question or req.question.strip() == "":
         raise HTTPException(status_code=400, detail="Question must be provided.")
+
     qa = QASystem(db)
-    result = qa.answer(req.question, top_k=req.top_k)
+    result = qa.answer(req.question, top_k=req.top_k, document_ids=req.document_ids)
 
     # Save to QA history
     source_ids = ",".join(str(s["chunk_id"]) for s in result.get("sources", []))

@@ -13,3 +13,6 @@ faiss-cpu
 python-dotenv
 psycopg2
 aiofiles
+sentence-transformers
+numpy
+nltk
